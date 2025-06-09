@@ -1,18 +1,19 @@
 #pragma once
 
 #include "container.h"
+#include <memory>
 #include <random>
 #include <vector>
 
 constexpr int DEFAULT_MAX_LEVEL = 20;
 constexpr float LEVEL_UP_CHANCE = 0.5;
 
-template <typename T, typename Compare = std::less<T>> class SkipList {
+template <typename T, typename Compare = std::less<T>,
+          typename Allocator = std::allocator<T>>
+class SkipList {
   public:
     // this one (or the maxLevel) even necessary?
-    explicit SkipList(int maxLevel = DEFAULT_MAX_LEVEL)
-        : _maxLevel(maxLevel) {}; // completely arbitrary value,
-                                  // log(1,000,000) =~ 20
+    explicit SkipList(int maxLevel = DEFAULT_MAX_LEVEL) : maxLevel(maxLevel) {};
 
     SkipList(const SkipList &) = delete;
     SkipList(SkipList &&) = delete;
@@ -35,18 +36,21 @@ template <typename T, typename Compare = std::less<T>> class SkipList {
         T value;
         std::vector<Node *> forward;
 
-        Node(const T &val, int level) : value(val), forward(level, nullptr) {}
+        Node(const T &&val, int level)
+            : value(std::move(val)), forward(level, nullptr) {}
     };
+    using NodeAllocator =
+        typename std::allocator_traits<Allocator>::template rebind_alloc<Node>;
 
     int randomLevel();
     Node *createNode(const T &value, int level);
 
-    const int _maxLevel;
-    int _currentLevel = 0;
+    const int maxLevel;
+    int currentLevel = 0;
     size_t _size = 0;
-    Node *_header;
-    mutable std::mt19937 _gen;
-    mutable std::uniform_real_distribution<> _dist;
+    Node *header;
+    mutable std::mt19937 gen;
+    mutable std::uniform_real_distribution<> dist;
     Compare comp;
 };
 
