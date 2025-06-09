@@ -5,6 +5,7 @@
 #include <vector>
 
 constexpr int DEFAULT_MAX_LEVEL = 20;
+constexpr float LEVEL_UP_CHANCE = 0.5;
 
 template <typename T, typename Compare = std::less<T>> class SkipList {
   public:
@@ -51,4 +52,4 @@ template <typename T, typename Compare = std::less<T>> class SkipList {
 
 #include "skiplist/skiplist.hpp"
 
-static_assert(Dontainer<SkipList<int>, int>);
+static_assert(Container<SkipList<int>, int>);

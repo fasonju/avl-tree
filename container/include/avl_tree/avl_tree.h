@@ -147,5 +147,5 @@ class AVLTree {
 #include "avl_tree/avl_tree.hpp"
 #include "avl_tree/iterator.hpp" // IWYU pragma: keep
 
-static_assert(Dontainer<AVLTree<int>, int>);
+static_assert(Container<AVLTree<int>, int>);
 static_assert(std::ranges::range<AVLTree<int>>);

@@ -4,7 +4,7 @@
 #include <cstddef>
 
 template <typename C, typename T>
-concept Dontainer = std::default_initializable<C> &&
+concept Container = std::default_initializable<C> &&
                     requires(C container, T value, const T &const_value) {
                         // modifiers
                         { container.insert(value) } -> std::same_as<bool>;
